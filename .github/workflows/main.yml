@@ -24,12 +24,10 @@ jobs:
         fetch-depth: 0  
 
     - name: Store account certificate
-      run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode > cert.pem ; ls -la
-      working-directory: /tmp
+      run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode > /tmp/cert.pem ; ls -la
 
     - name: Login to Azure
-      run: az login --service-principal -u ${{ secrets.SPN_ID }} -p cert.pem --tenant ${{ secrets.TENANT_ID }} -o none
-      working-directory: /tmp
+      run: az login --service-principal -u ${{ secrets.SPN_ID }} -p /tmp/cert.pem --tenant ${{ secrets.TENANT_ID }} -o none
 
     - name: Storing ip ranges
       run: az network list-service-tags --location westeurope
