@@ -13,7 +13,7 @@ jobs:
   get-and-store-az-ip:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
 
     steps:
