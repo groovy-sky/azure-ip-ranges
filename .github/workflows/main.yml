@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Store account certificate
-      run: echo $SPN_KEY_BASE64 | base64 --decode > cert.pem ; ls -la
+      run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode > cert.pem ; ls -la
       working-directory: /tmp
 
     - name: Login to Azure
