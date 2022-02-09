@@ -31,3 +31,6 @@ jobs:
 
     - name: Storing ip ranges
       run: az network list-service-tags --location westeurope
+
+    - name: Storing ip ranges
+      run: ./script.sh
