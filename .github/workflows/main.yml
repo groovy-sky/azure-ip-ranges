@@ -5,9 +5,7 @@ on:
     paths:
     - '.github/workflows/*'
   schedule:
-    - cron: '0 0 1 * *'
-
-
+    - cron: '0 3 * * *'
 
 jobs:
   get-and-store-az-ip:
@@ -23,7 +21,7 @@ jobs:
       with:
         fetch-depth: 0  
 
-    - name: Store account certificate
+    - name: Store accounts certificate
       run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode > /tmp/cert.pem ; ls -la
 
     - name: Login to Azure
@@ -32,7 +30,8 @@ jobs:
     - name: Storing ip ranges
       run: cd ip; ./script.sh
 
-    - run: |
+    - name: Publishing the changes
+      run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
