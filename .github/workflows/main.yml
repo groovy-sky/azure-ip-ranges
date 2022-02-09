@@ -20,7 +20,8 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Store account certificate
-      run: echo $SPN_KEY_BASE64 | base64 --decode > /tmp/cert.pem
+      run: echo $SPN_KEY_BASE64 | base64 --decode > cert.pem ; ls -la
+      working-directory: /tmp
 
     - name: Login to Azure
       run: az login --service-principal -u $SPN_ID -p cert.pem --tenant $TENANT_ID --verbose 
