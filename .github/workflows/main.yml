@@ -23,4 +23,5 @@ jobs:
       run: echo $SPN_KEY_BASE64 | base64 --decode > /tmp/cert.pem
 
     - name: Login to Azure
-      run: az login --service-principal -u $SPN_ID -p /tmp/cert.pem --tenant $TENANT_ID
+      run: az login --service-principal -u $SPN_ID -p cert.pem --tenant $TENANT_ID
+      working-directory: /tmp
