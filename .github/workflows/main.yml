@@ -7,9 +7,6 @@ on:
   schedule:
     - cron: '0 0 1 * *'
 
-env:
-  REGISTRY: ghcr.io
-
 jobs:
   get-and-store-az-ip:
     runs-on: ubuntu-latest
@@ -24,3 +21,6 @@ jobs:
 
     - name: Store account certificate
       run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode > /tmp/cert.pem
+
+    - name: Login to Azure
+      run: az login --service-principal --username ${{ secrets.SPN_ID }} -p /tmp/cert.pem --tenant ${{ secrets.TENANT_ID }}
