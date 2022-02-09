@@ -22,5 +22,5 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Test
-      run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode; pwd; touch /tmp/some.txt
+    - name: Store account certificate
+      run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode > /tmp/cert.pem
