@@ -20,9 +20,9 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  
-          
+      with:
+        fetch-depth: 0  
+        
     - run: |
         date > published.txt
         git config user.name github-actions
