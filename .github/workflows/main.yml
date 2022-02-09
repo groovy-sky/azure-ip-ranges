@@ -23,4 +23,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Test
-      run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode; pwd; ls -la; ls /
+      run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode; pwd; touch /tmp/some.txt
