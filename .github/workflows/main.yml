@@ -33,5 +33,4 @@ jobs:
       run: az network list-service-tags --location westeurope
 
     - name: Storing ip ranges
-      run: ./script.sh
-      working-directory: $GITHUB_WORKSPACE/ip
+      run: cd ip; ./script.sh
