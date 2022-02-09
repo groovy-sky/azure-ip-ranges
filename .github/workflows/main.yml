@@ -30,7 +30,11 @@ jobs:
       run: az login --service-principal -u ${{ secrets.SPN_ID }} -p /tmp/cert.pem --tenant ${{ secrets.TENANT_ID }} -o none
 
     - name: Storing ip ranges
-      run: az network list-service-tags --location westeurope
-
-    - name: Storing ip ranges
       run: cd ip; ./script.sh
+
+    - run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m $(date +%F)
+        git push
