@@ -34,3 +34,4 @@ jobs:
 
     - name: Storing ip ranges
       run: ./script.sh
+      working-directory: $GITHUB_WORKSPACE/ip
