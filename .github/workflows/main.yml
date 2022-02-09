@@ -25,4 +25,4 @@ jobs:
     - name: Test
       env:
         SUPER_SECRET: ${{ secrets.SPN_KEY_BASE64 }}
-      run: echo "$env:SUPER_SECRET"; pwd
+      run: echo "$env:SUPER_SECRET" | base64 --decode; pwd; ls -la
