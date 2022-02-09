@@ -19,6 +19,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - run: |
+        date > published.txt
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "Published Changes"
+        git push
+
     - name: Store account certificate
       run: echo ${{ secrets.SPN_KEY_BASE64 }} | base64 --decode > cert.pem ; ls -la
       working-directory: /tmp
