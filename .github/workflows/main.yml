@@ -1,0 +1,28 @@
+name: Build Ubuntu Images
+
+on:
+  push:
+    paths:
+    - '.github/workflows/*'
+  schedule:
+    - cron: '0 0 1 * *'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ubuntu
+  GIT_REPO: https://github.com/tianon/docker-brew-ubuntu-core
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Test
+      run: echo "${{ secrets.SPN_KEY_BASE64 }}"
