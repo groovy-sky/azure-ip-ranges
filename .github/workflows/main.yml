@@ -5,7 +5,7 @@ on:
     paths:
     - '.github/workflows/*'
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 3 */7 * *'
 
 jobs:
   get-and-store-az-ip:
