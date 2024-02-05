@@ -1,35 +1,59 @@
 import requests  
-from netaddr import IPNetwork, IPAddress  
+from netaddr import IPNetwork, IPAddress, AddrFormatError  
+import argparse  
+from concurrent.futures import ThreadPoolExecutor  
+import re  
   
+# Hard-code GitHub username and repo  
+user = 'groovy-sky'  
+repo = 'azure-ip-ranges'  
+  
+# Load CIDRs from GitHub
 def load_cidrs_from_github(user, repo):  
-    cidrs = []  
     url = f"https://api.github.com/repos/{user}/{repo}/contents/ip"  
-    headers = {"Accept": "application/vnd.github.v3+json"} # GitHub requires setting Accept header  
+    headers = {"Accept": "application/vnd.github.v3+json"}  
     r = requests.get(url, headers=headers)  
-    r.raise_for_status() # ensure we notice bad responses  
+    r.raise_for_status()  
     files = r.json()  
+    return files  
+
+# Check if IP is in CIDRs
+def is_ip_in_cidrs(ip, file):  
+    try:  
+        file_content = requests.get(file["download_url"]).text  
+        cidrs = file_content.split('\n')  
+        for cidr in cidrs:  
+            cidr = cidr.strip()  
+            if cidr:  
+                try:  
+                    if IPAddress(ip) in IPNetwork(cidr):  
+                        return file["download_url"], cidr  
+                except AddrFormatError:  
+                    pass  
+    except Exception as e:  
+        print(f"Error processing file {file['download_url']}: {e}")  
+    return None  
   
-    for file in files:  
-        if file["name"].endswith(".txt"):  
-            file_url = file["download_url"]  
-            file_content = requests.get(file_url).text  
-            cidrs.extend(file_content.split('\n'))  
+# Initialize parser  
+parser = argparse.ArgumentParser(description="Check if IP is in any CIDR range in a GitHub repository")  
+parser.add_argument("ip", help="IP address to check")  
   
-    return cidrs  
+args = parser.parse_args()  
   
-def is_ip_in_cidrs(ip, cidrs):  
-    for cidr in cidrs:  
-        cidr = cidr.strip()  # Remove leading/trailing whitespace  
-        if cidr:  # Skip empty lines  
-            try:  
-                if IPAddress(ip) in IPNetwork(cidr):  
-                    return True  
-            except AddrFormatError:  
-                print(f"Invalid CIDR format: {cidr}")  
-    return False 
+# Clean up and validate IP to match IPv4 or IPv6 format
+ip = args.ip.strip()  # Remove leading and trailing whitespaces  
+if not re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip) and not re.match(r'^[a-fA-F0-9:]+$', ip): 
+    print("Invalid IP address")  
+    exit(1)  
   
 # Load CIDR ranges from Github  
-cidrs = load_cidrs_from_github('groovy-sky', 'azure-ip-ranges')  
+files = load_cidrs_from_github(user, repo)  
   
 # Check if IP is in CIDRs  
-print(is_ip_in_cidrs('4.149.254.67', cidrs))  # Returns True if IP is in any CIDR range, else False 
+with ThreadPoolExecutor() as executor:  
+    futures = [executor.submit(is_ip_in_cidrs, ip, file) for file in files if file["name"].endswith(".txt")]  
+  
+for future in futures:  
+    result = future.result()  
+    if result:  
+        print(f"{ip} found in {result[0]} [CIDR range: {result[1]}]")  
