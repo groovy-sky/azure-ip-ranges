@@ -18,7 +18,7 @@ There is only [one workflow](/.github/workflows/main.yml) which do a few things:
 
 ## What?
 
-The result of the workflow is a bunch of files with IP addresses. For easier search I also wrote a small Python script which can be used to search for a specific IP in all of these files. The script is located [here](/search.py). You can install it using the following command:
+The result of the workflow is a bunch of files with IP addresses. For easier search I also wrote a small Python script which can be used to search for a specific IP in all of these files. The script is located [here](/search.py). You can install it using the following command(you'll need to have Python and Linux OS/WSL installed):
 
 ```
 curl -s https://raw.githubusercontent.com/groovy-sky/azure-ip-ranges/main/requirements.txt | xargs -n 1 pip install --user
@@ -28,5 +28,8 @@ alias azsearch='curl -s https://raw.githubusercontent.com/groovy-sky/azure-ip-ra
 After that you can use it like this:
 
 ```
-azsearch 4.149.254.67
-````
+azsearch [IP_ADDRESS]
+```
+
+As a result you will get a list of files where the IP is located (or none if it's not found). Also works in Azure CLI:
+![](/img/ipsearch_example.png)
