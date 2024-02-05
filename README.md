@@ -15,3 +15,18 @@ There is only [one workflow](/.github/workflows/main.yml) which do a few things:
 2. Using the certificate logins to Azure CLI.
 3. Executes [script.sh](/ip/script.sh), which get IPs and stores them in separate files locally.
 4. Pushes changes to this repository.
+
+## What?
+
+The result of the workflow is a bunch of files with IP addresses. For easier search I also wrote a small Python script which can be used to search for a specific IP in all of these files. The script is located [here](/search.py). You can install it using the following command:
+
+```
+curl -s https://raw.githubusercontent.com/groovy-sky/azure-ip-ranges/main/requirements.txt | xargs -n 1 pip install --user
+alias azsearch='curl -s https://raw.githubusercontent.com/groovy-sky/azure-ip-ranges/main/search.py | python -'  # Add this to your .bashrc or .zshrc
+```
+
+After that you can use it like this:
+
+```
+azsearch 4.149.254.67
+````
